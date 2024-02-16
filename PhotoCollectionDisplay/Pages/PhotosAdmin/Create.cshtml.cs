@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +18,24 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
         [BindProperty]
         public Photo Photo { get; set; } = default!;
 
-        public CreateModel(PhotoCollectionDisplay.Data.PhotoCollectionDisplayContext context)
+
+        [BindProperty]
+        [DisplayName("Upload Photo")]
+        public IFormFile FileUpload { get; set; }
+
+
+
+        public CreateModel(PhotoCollectionDisplay.Data.PhotoCollectionDisplayContext context, IHostEnvironment environment)
         {
             _context = context;
         }
+
 
         public IActionResult OnGet()
         {
             return Page();
         }  
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -37,6 +47,27 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
 
             //Set the publish date for the photo
             Photo.PublishDate = DateTime.Now;
+
+            //
+            // Upload file to server
+            //
+
+            //Upload file to server
+            string filename = FileUpload.FileName;
+
+            //Upload Photo object to include the photo filename 
+            Photo.FileName  = filename;
+
+            //Save the file 
+            string projectRootPath = _environment.ContentRootPath;
+            string fileSavePath = Path.Combine(projectRootPath, "wwwroot\\uploads", filename);
+
+            //we use a "using" to ensure the filestream is disposed of when we're done with it
+            using (FileStream fileStream = new FileStream(fileSavePath, FileMode.Create))
+            {
+                FileUpload.CopyTo(fileStream);
+            }
+
 
             //update the .net contex
             _context.Photo.Add(Photo);
