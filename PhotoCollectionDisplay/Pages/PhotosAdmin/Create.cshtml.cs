@@ -29,6 +29,7 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
         public CreateModel(PhotoCollectionDisplayContext context, IHostEnvironment environment)
         {
             _context = context;
+            _environment = environment; //initialize environment 
         }
 
 
@@ -53,8 +54,8 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
             // Upload file to server
             //
 
-            //Upload file to server
-            string filename = FileUpload.FileName;
+            //Make a unique filename
+            string filename = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + FileUpload.FileName;
 
             //Upload Photo object to include the photo filename 
             Photo.FileName  = filename;

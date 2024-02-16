@@ -13,14 +13,12 @@
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.Photo[0].Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Photo[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Photo[0].FileName)
             </th>
             <th></th>
         </tr>
@@ -29,13 +27,13 @@
 @foreach (var item in Model.Photo) {
         <tr>
             <td>
+                <img src="/uploads/@item.FileName" class="img-fluid" />
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FileName)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.PhotoId">Edit</a> |
