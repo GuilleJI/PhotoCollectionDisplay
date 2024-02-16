@@ -13,7 +13,8 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
 {
     public class CreateModel : PageModel
     {
-        private readonly PhotoCollectionDisplay.Data.PhotoCollectionDisplayContext _context;
+        private readonly PhotoCollectionDisplayContext _context;
+        private readonly IHostEnvironment _environment;
 
         [BindProperty]
         public Photo Photo { get; set; } = default!;
@@ -25,7 +26,7 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
 
 
 
-        public CreateModel(PhotoCollectionDisplay.Data.PhotoCollectionDisplayContext context, IHostEnvironment environment)
+        public CreateModel(PhotoCollectionDisplayContext context, IHostEnvironment environment)
         {
             _context = context;
         }
@@ -60,7 +61,7 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
 
             //Save the file 
             string projectRootPath = _environment.ContentRootPath;
-            string fileSavePath = Path.Combine(projectRootPath, "wwwroot\\uploads", filename);
+            string fileSavePath = Path.Combine(projectRootPath, "wwwroot", "uploads", filename);
 
             //we use a "using" to ensure the filestream is disposed of when we're done with it
             using (FileStream fileStream = new FileStream(fileSavePath, FileMode.Create))
