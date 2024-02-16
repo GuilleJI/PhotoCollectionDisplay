@@ -14,14 +14,15 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
     {
         private readonly PhotoCollectionDisplay.Data.PhotoCollectionDisplayContext _context;
 
-        public IList<Photo> Photo { get;set; } = default!;
-
+        
         public IndexModel(PhotoCollectionDisplay.Data.PhotoCollectionDisplayContext context)
         {
             _context = context;
         }
-
         
+
+        public IList<Photo> Photo { get;set; } = default!;
+
 
         public async Task OnGetAsync()
         {

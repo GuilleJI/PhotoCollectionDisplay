@@ -4,4 +4,19 @@
     ViewData["Title"] = "Home page";
 }
 
-<h1>All Photos</h1>
+<div class="pin-container">
+    @foreach (var photo in Model.Photos)
+    {
+        string imageSrc = "/uploads/" + photo.FileName; 
+
+        <div class="pin">
+            <a asp-page="DisplayPhoto" asp-route-id="@photo.PhotoId"></a>
+            <img src="@imageSrc" />
+            <div class="pin-caption">
+                <img src="~/Profiles/Brandon.jpg" />
+                <div>Brandon</div>
+            </div>
+        </div>
+        
+    }
+</div>
