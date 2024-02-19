@@ -24,12 +24,31 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
         [DisplayName("Upload Photo")]
         public IFormFile FileUpload { get; set; }
 
+        // Category select options
+        public List<SelectListItem> CategoryOptions { get; set; } = new List<SelectListItem>();
+
 
 
         public CreateModel(PhotoCollectionDisplayContext context, IHostEnvironment environment)
         {
             _context = context;
             _environment = environment; //initialize environment 
+
+            //
+            // Populate the category select options
+            //
+
+            // get all the categories in table
+            List<Category> categories = _context.Category.ToList(); 
+
+            foreach(var category in categories)
+            {
+                CategoryOptions.Add(new SelectListItem
+                {                  
+                    Text = category.Title,
+                    Value= category.CategoryId.ToString()
+                });
+            }
         }
 
 
@@ -42,20 +61,24 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+            // Set the category for the Photo object based on user's selection
+            Category selectCategory = _context.Category.Single(m => m.CategoryId == Photo.Category.CategoryId);
+            Photo.Category = selectCategory;
+
+            // Set the publish date for the photo
+            Photo.PublishDate = DateTime.Now;
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-
-            //Set the publish date for the photo
-            Photo.PublishDate = DateTime.Now;
-
+         
             //
             // Upload file to server
             //
 
             //Make a unique filename
-            string filename = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + FileUpload.FileName;
+            string filename = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff_") + FileUpload.FileName;
 
             //Upload Photo object to include the photo filename 
             Photo.FileName  = filename;

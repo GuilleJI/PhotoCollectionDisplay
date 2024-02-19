@@ -11,8 +11,9 @@
         //Creating a published date for our uploaded photos
         public DateTime PublishDate { get; set; }
 
+
         //Our Photo will now have a category
-        public Category Category { get; set; } = default!;
+        public Category Category { get; set; } = new();
 
     }
 }

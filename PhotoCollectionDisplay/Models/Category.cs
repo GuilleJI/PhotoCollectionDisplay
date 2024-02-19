@@ -6,6 +6,6 @@
         public string Title { get; set; } = string.Empty;
 
         //Our Category can have a list of photos
-        public List<Photo> Photos { get; set; } = default!;
+        public List<Photo> Photos { get; set; } = new();
     }
 }

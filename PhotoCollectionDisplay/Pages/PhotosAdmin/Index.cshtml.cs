@@ -21,12 +21,15 @@ namespace PhotoCollectionDisplay.Pages.PhotosAdmin
         }
         
 
-        public IList<Photo> Photo { get;set; } = default!;
+
+        public IList<Photo> Photos { get;set; } = default!;
 
 
         public async Task OnGetAsync()
         {
-            Photo = await _context.Photo.ToListAsync();
+            // Add an Include() to join the Photo to Category when executing the SQL statement.
+            Photos = await _context.Photo.Include("Category").ToListAsync();
+            
         }
     }
 }
