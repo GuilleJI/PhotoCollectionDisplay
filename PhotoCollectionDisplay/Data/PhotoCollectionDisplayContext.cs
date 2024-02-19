@@ -15,5 +15,6 @@ namespace PhotoCollectionDisplay.Data
         }
 
         public DbSet<PhotoCollectionDisplay.Models.Photo> Photo { get; set; } = default!; //Representation of our database :)
+        public DbSet<PhotoCollectionDisplay.Models.Category> Category { get; set; } = default!;
     }
 }
