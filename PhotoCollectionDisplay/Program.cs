@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PhotoCollectionDisplay.Data;
 namespace PhotoCollectionDisplay
@@ -8,11 +9,24 @@ namespace PhotoCollectionDisplay
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            
+            // Add services to the container.
+            builder.Services.AddRazorPages();
+            
+            // Entity Framework
             builder.Services.AddDbContext<PhotoCollectionDisplayContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("PhotoCollectionDisplayContext") ?? throw new InvalidOperationException("Connection string 'PhotoCollectionDisplayContext' not found.")));
 
-            // Add services to the container.
-            builder.Services.AddRazorPages();
+            // Cookie-based authentication            
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                    options.SlidingExpiration = true; //reset the clock
+                    options.LoginPath = "/Users/Login";
+                    options.LogoutPath = "/Users/Logout";
+                    options.AccessDeniedPath = "/Error/";
+                });
 
             var app = builder.Build();
 
@@ -29,6 +43,7 @@ namespace PhotoCollectionDisplay
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapRazorPages();
