@@ -1,9 +1,12 @@
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PhotoCollectionDisplay.Data;
 using PhotoCollectionDisplay.Models;
+using System.Security.Claims;
 
 namespace PhotoCollectionDisplay.Pages.Users
 {
@@ -50,6 +53,25 @@ namespace PhotoCollectionDisplay.Pages.Users
             if (validPassword)
             {
                 // to-do: Initialize cookie with session
+
+                //
+                // Initialize user session
+                //
+                // Create claims, 1 custom one
+                List<Claim> claims = new List<Claim>{
+                    new Claim(ClaimTypes.Name, userDb.UserId.ToString()),
+                    new Claim(ClaimTypes.Role, "Member"),
+                    new Claim("FullName", userDb.FirstName + " " +userDb.LastName)
+                };
+
+                // Create Claims Identity
+                ClaimsIdentity claimsidentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsidentity),
+                    new AuthenticationProperties());
+
 
                 return RedirectToPage("/PhotosAdmin/Index");
             }

@@ -15,5 +15,9 @@
         //Our Photo will now have a category
         public Category Category { get; set; } = new();
 
+        public User User { get; set; } = new();
+
+        
+
     }
 }

@@ -37,7 +37,17 @@ namespace PhotoCollectionDisplay.Pages.Users
 
             // Save user to database
             _context.User.Add(_User);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                
+                return Page();
+            }
+           
 
             return RedirectToPage("/Users/Login");
         }
